@@ -68,6 +68,7 @@ std::unordered_set<int> Ransac(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, int ma
 
     int max_inliers = 0;
     double a, b, c, d, distance, denominator;
+    double total_dist;
 
     std::random_device random_device;
     std::mt19937 engine{random_device()};
@@ -92,6 +93,7 @@ std::unordered_set<int> Ransac(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, int ma
         for (int j = 0; j < cloud->points.size(); ++j) {
             pcl::PointXYZ curr_point = cloud->points[j];
             distance = std::abs(a * curr_point.x + b * curr_point.y + c * curr_point.z + d) / denominator;
+            total_dist += distance;
             if (distance < distanceTol) {
                 currentInliers.insert(j);
             }
