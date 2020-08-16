@@ -86,12 +86,9 @@ std::unordered_set<int> Ransac(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, int ma
         a = (p[1].y - p[0].y)*(p[2].z - p[0].z) - (p[1].z - p[0].z)*(p[2].y - p[0].y);
         b = (p[1].z - p[0].z)*(p[2].x - p[0].x) - (p[1].x - p[0].x)*(p[2].z - p[0].z);
         c = (p[1].x - p[0].x)*(p[2].y - p[0].y) - (p[1].y - p[0].y)*(p[2].x - p[0].x);
-        d = -(a*p[0].x + b*p[0].y + c*p[0].y);
-//        std::cout << "------------------" << std::endl;
+        d = -(a*p[0].x + b*p[0].y + c*p[0].z);
         denominator = std::sqrt(std::pow(a, 2) + std::pow(b, 2) + std::pow(c, 2));
 
-//        std::cout << "denominator: " << denominator << std::endl;
-//        std::cout << "First point: " << std::abs(a * cloud->points[0].x + b * cloud->points[0].y + c * cloud->points[0].z + d) / denominator << std::endl;
         for (int j = 0; j < cloud->points.size(); ++j) {
             pcl::PointXYZ curr_point = cloud->points[j];
             distance = std::abs(a * curr_point.x + b * curr_point.y + c * curr_point.z + d) / denominator;
@@ -104,10 +101,6 @@ std::unordered_set<int> Ransac(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, int ma
             inliersResult = currentInliers;
         }
     }
-//    std::cout << "First point coords: " << cloud->points[0].x << ", " << cloud->points[0].y << ", " << cloud->points[0].z << std::endl;
-//
-//    std::cout << "Inliers: " << inliersResult.size() << std::endl;
-
 	return inliersResult;
 }
 
@@ -122,7 +115,7 @@ int main ()
 	
 
 	// TODO: Change the max iteration and distance tolerance arguments for Ransac function
-	std::unordered_set<int> inliers = Ransac(cloud, 100, 0.2);
+	std::unordered_set<int> inliers = Ransac(cloud, 20, 0.2);
 
 	pcl::PointCloud<pcl::PointXYZ>::Ptr  cloudInliers(new pcl::PointCloud<pcl::PointXYZ>());
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloudOutliers(new pcl::PointCloud<pcl::PointXYZ>());
