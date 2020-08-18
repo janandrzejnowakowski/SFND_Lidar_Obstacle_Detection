@@ -27,8 +27,36 @@ struct KdTree
 
 	void insert(std::vector<float> point, int id)
 	{
-		// TODO: Fill in this function to insert a new point into the tree
-		// the function should create a new node and place correctly with in the root 
+		insertHelper(&root, point, id, 0);
+	}
+
+    void insertHelper(Node** node, std::vector<float> point, int id, int level)
+    {
+        if (*node == NULL)  {
+            *node = new Node(point, id);
+        } else {
+            uint idx = level % 2;
+            if ((*node)->point[idx] < point[idx]) {
+                insertHelper(&((*node)->left), point, id, level + 1);
+            } else {
+                insertHelper(&((*node)->right), point, id, level + 1);
+            }
+        }
+    }
+
+    void searchHelper(Node* node, std::vector<float> target, float distanceTol, std::vector<int>& ids, int level) {
+	    if (node == NULL) return;
+	    uint idx = level % 2;
+	    if (node->point[idx] - distanceTol > target[idx]) {
+            searchHelper(node->left, target, distanceTol, ids, level + 1);
+	    } else if (node->point[idx] + distanceTol < target[idx]) {
+            searchHelper(node->right, target, distanceTol, ids, level + 1);
+	    } else {
+	        if (sqrt(pow(node->point[0] - target[0], 2) + pow(node->point[1] - target[1], 2)) < distanceTol)
+	            ids.push_back(node->id);
+            searchHelper(node->left, target, distanceTol, ids, level + 1);
+            searchHelper(node->right, target, distanceTol, ids, level + 1);
+	    }
 
 	}
 
@@ -36,9 +64,9 @@ struct KdTree
 	std::vector<int> search(std::vector<float> target, float distanceTol)
 	{
 		std::vector<int> ids;
+        searchHelper(root, target, distanceTol, ids, 0);
 		return ids;
 	}
-	
 
 };
 
