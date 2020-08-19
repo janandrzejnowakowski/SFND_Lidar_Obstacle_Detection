@@ -36,10 +36,10 @@ struct KdTree
             *node = new Node(point, id);
         } else {
             uint idx = level % 2;
-            if ((*node)->point[idx] < point[idx]) {
-                insertHelper(&((*node)->left), point, id, level + 1);
-            } else {
+            if ((*node)->point[idx] <= point[idx]) {
                 insertHelper(&((*node)->right), point, id, level + 1);
+            } else {
+                insertHelper(&((*node)->left), point, id, level + 1);
             }
         }
     }
