@@ -18,7 +18,8 @@
 #include <ctime>
 #include <chrono>
 #include "render/box.h"
-#include "ransac.h"
+#include <unordered_set>
+#include <random>
 
 template<typename PointT>
 class ProcessPointClouds {
@@ -28,6 +29,8 @@ public:
     ProcessPointClouds();
     //deconstructor
     ~ProcessPointClouds();
+
+    std::unordered_set<int> Ransac(typename pcl::PointCloud<PointT>::Ptr, int, float);
 
     void numPoints(typename pcl::PointCloud<PointT>::Ptr cloud);
 
