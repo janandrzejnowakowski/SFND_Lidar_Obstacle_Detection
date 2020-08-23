@@ -57,7 +57,6 @@ struct KdTree
             searchHelper(node->left, target, distanceTol, ids, level + 1);
             searchHelper(node->right, target, distanceTol, ids, level + 1);
 	    }
-
 	}
 
 	// return a list of point ids in the tree that are within distance of target
@@ -67,7 +66,6 @@ struct KdTree
         searchHelper(root, target, distanceTol, ids, 0);
 		return ids;
 	}
-
 };
 
 

@@ -18,6 +18,7 @@
 #include <ctime>
 #include <chrono>
 #include "render/box.h"
+#include "kdtree.h"
 #include <unordered_set>
 #include <random>
 
@@ -31,6 +32,10 @@ public:
     ~ProcessPointClouds();
 
     std::unordered_set<int> Ransac(typename pcl::PointCloud<PointT>::Ptr, int, float);
+
+    void proximity(KdTree<PointT>* tree, typename pcl::PointCloud<PointT>::Ptr cloud, int idx, pcl::PointIndices &cluster, std::vector<bool>& wasVisited, float distanceTol);
+
+    std::vector<pcl::PointIndices> euclideanCluster(typename pcl::PointCloud<PointT>::Ptr cloud, KdTree<PointT>* tree, float distanceTol, int minSize, int maxSize);
 
     void numPoints(typename pcl::PointCloud<PointT>::Ptr cloud);
 
